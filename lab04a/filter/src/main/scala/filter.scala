@@ -15,9 +15,7 @@ object filter extends App {
   // Параметры подключения и чтения из Кафки
   val kafkaParams = Map(
     "kafka.bootstrap.servers" -> "spark-master-1:6667",
-    "subscribe" -> "lab04_input_data",
-    "spark.filter.offset" -> "earliest",
-    "spark.filter.output_dir_prefix" -> "visits"
+    "subscribe" -> "lab04_input_data"
   )
 
   // Читаем данные из Кафки
