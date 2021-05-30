@@ -8,7 +8,7 @@ object filter extends App {
 
   import spark.implicits._
 
-  val output_dir_prefix = "visits"
+  val output_dir_prefix = "/user/denis.sidorenko/visits"
 
   val spark = SparkSession.builder()
     .appName("filter")
