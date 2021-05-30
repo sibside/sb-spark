@@ -13,8 +13,11 @@ object filter extends App {
     .getOrCreate()
 
   val output_dir_prefix = spark.conf.get("spark.filter.output_dir_prefix")
-  val offset = spark.conf.get("spark.filter.offset")
   val topic_name = spark.conf.get("spark.filter.topic_name")
+  var offset = spark.conf.get("spark.filter.offset")  // earliest
+  if (offset != "earliest") {
+    offset = s"""{"$topic_name":{"0":$offset}}"""
+  }
 
   // Параметры подключения и чтения из Кафки
   val kafkaParams = Map(
