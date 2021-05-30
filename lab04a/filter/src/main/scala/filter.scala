@@ -6,16 +6,13 @@ import org.apache.spark.sql.functions.{col, date_format, to_timestamp}
  */
 object filter extends App {
 
-  import spark.implicits._
-
   val spark = SparkSession.builder()
     .appName("Lab04Filter")
     .getOrCreate()
 
-
-  var output_dir_prefix = spark.conf.get("spark.filter.output_dir_prefix")
-  var topic_name = spark.conf.get("spark.filter.topic_name")
-  var offset = spark.conf.get("spark.filter.offset")  // earliest
+  val output_dir_prefix = spark.conf.get("spark.filter.output_dir_prefix")
+  val topic_name = spark.conf.get("spark.filter.topic_name")
+  var offset = spark.conf.get("spark.filter.offset") // earliest
   if (offset != "earliest") {
     offset = s"""{"$topic_name":{"0":$offset}}"""
   }
@@ -27,6 +24,8 @@ object filter extends App {
     "startingOffsets" -> offset,
     "endingOffsets" -> "latest"
   )
+
+  import spark.implicits._
 
   // Читаем данные из Кафки
   val df = spark.read.format("kafka").options(kafkaParams).load()
