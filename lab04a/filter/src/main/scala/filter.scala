@@ -9,11 +9,12 @@ object filter extends App {
   import spark.implicits._
 
   val spark = SparkSession.builder()
-    .appName("filter")
+    .appName("Lab04Filter")
     .getOrCreate()
+  
 
-  val output_dir_prefix = spark.conf.get("spark.filter.output_dir_prefix")
-  val topic_name = spark.conf.get("spark.filter.topic_name")
+  var output_dir_prefix = spark.conf.get("spark.filter.output_dir_prefix")
+  var topic_name = spark.conf.get("spark.filter.topic_name")
   var offset = spark.conf.get("spark.filter.offset")  // earliest
   if (offset != "earliest") {
     offset = s"""{"$topic_name":{"0":$offset}}"""
