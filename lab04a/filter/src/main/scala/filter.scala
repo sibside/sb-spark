@@ -11,7 +11,7 @@ object filter extends App {
   val spark = SparkSession.builder()
     .appName("Lab04Filter")
     .getOrCreate()
-  
+
 
   var output_dir_prefix = spark.conf.get("spark.filter.output_dir_prefix")
   var topic_name = spark.conf.get("spark.filter.topic_name")
@@ -24,7 +24,8 @@ object filter extends App {
   val kafkaParams = Map(
     "kafka.bootstrap.servers" -> "spark-master-1:6667",
     "subscribe" -> topic_name,
-    "startingOffsets" -> offset
+    "startingOffsets" -> offset,
+    "endingOffsets" -> "latest"
   )
 
   // Читаем данные из Кафки
