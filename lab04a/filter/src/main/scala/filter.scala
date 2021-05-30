@@ -8,22 +8,24 @@ object filter extends App {
 
   import spark.implicits._
 
-  val output_dir_prefix = "/user/denis.sidorenko/visits"
-
   val spark = SparkSession.builder()
     .appName("filter")
     .getOrCreate()
 
+  val output_dir_prefix = spark.conf.get("spark.filter.output_dir_prefix")
+  val offset = spark.conf.get("spark.filter.offset")
+  val topic_name = spark.conf.get("spark.filter.topic_name")
+
   // Параметры подключения и чтения из Кафки
   val kafkaParams = Map(
-    "kafka.bootstrap.servers" -> "spark-master-1:6667"
+    "kafka.bootstrap.servers" -> "spark-master-1:6667",
+    "subscribe" -> topic_name,
+    "startingOffsets" -> offset
   )
 
   // Читаем данные из Кафки
   val df = spark.read.format("kafka").options(kafkaParams).load()
-
   val jsonString = df.select('value.cast("string")).as[String]
-
   val parsed = spark.read.json(jsonString)
 
   // View DF
@@ -46,10 +48,10 @@ object filter extends App {
   viewDF.write
     .mode("overwrite")
     .partitionBy("p_date")
-    .json(s"$output_dir_prefix/view/")
+    .json(s"$output_dir_prefix/view")
 
   buyDF.write
     .mode("overwrite")
     .partitionBy("p_date")
-    .json(s"$output_dir_prefix/buy/")
+    .json(s"$output_dir_prefix/buy")
 }
