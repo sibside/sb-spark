@@ -58,4 +58,6 @@ object train extends App {
 
   // 2.1 Сохраняем модель
   model.write.overwrite().save("/user/denis.sidorenko/model")
+
+  spark.stop()
 }
