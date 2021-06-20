@@ -34,9 +34,9 @@ object train extends App {
     .fit(weblogs2)
 
   // 1.6 Создаем Преобразователь, который отображает столбец индексов обратно в новый столбец соответствующих строковых значений.
-  val stringer = new IndexToString()
+  val converter = new IndexToString()
     .setInputCol("prediction")
-    .setOutputCol("category")
+    .setOutputCol("originalLabel")
     .setLabels(indexer.labels)
 
   // 1.7 Создаем Логическую регрессию
@@ -51,13 +51,11 @@ object train extends App {
 
   // 1.9 Создаем трубу для обучения (этап эстиматора)
   val pipeline = new Pipeline()
-    .setStages(Array(cv, indexer, lr, stringer))
+    .setStages(Array(cv, indexer, lr, converter))
 
   // 2.0 Обучаем модель
   val model = pipeline.fit(weblogs2)
 
   // 2.1 Сохраняем модель
   model.write.overwrite().save("/user/denis.sidorenko/model")
-
-  spark.stop()
 }
