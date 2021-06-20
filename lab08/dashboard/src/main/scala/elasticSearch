@@ -1,0 +1,34 @@
+Zt3XPmOF
+
+# 1 Putty
+curl http://denis.sidorenko:Zt3XPmOF@10.0.0.5:9200/denis_sidorenko_lab08
+
+curl -X PUT -H "Content-Type: application/json" 'http://denis.sidorenko:Zt3XPmOF@10.0.0.5:9200/denis_sidorenko_lab08?include_type_name=false' -d @-<<END
+{
+   "settings" : {
+        "number_of_shards" : 1,
+        "number_of_replicas" : 1
+    },
+
+   "mappings": {
+    "properties": {
+      "uid": {
+        "type": "keyword",
+        "null_value": "NULL"
+      },
+      "gender_age": {
+        "type": "keyword"
+      },
+      "date": {
+        "type": "date"
+      }
+    }
+  }
+}
+END
+
+# 2 Пишем в ElasticSearch
+
+# 3 Windows PowerShell
+
+ssh -L 5601:10.0.0.5:5601 -i npl.pem denis.sidorenko@spark-master-1.newprolab.com
